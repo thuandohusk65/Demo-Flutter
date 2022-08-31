@@ -15,8 +15,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 /// AnimationControllers can be created with `vsync: this` because of TickerProviderStateMixin.
-class _HomeScreenState extends State<HomeScreen>
-    with TickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   late TabController _tabController;
   var titleBar = "";
 
@@ -25,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen>
       Dio dio = Dio();
       dio.options.headers["Authorization"] = 'Bearer ${UserUtils.accessToken}';
       final response =
-      await dio.get('http://api.beta.radiantgalaxy.io/sdk/v1/user/info');
+          await dio.get('http://api.beta.radiantgalaxy.io/sdk/v1/user/info');
       Map<String, dynamic> dataResponse = json.decode(response.toString());
       final userInfo = UserInfo.fromJson(dataResponse);
       print("user info" + userInfo.userName);
@@ -51,23 +50,14 @@ class _HomeScreenState extends State<HomeScreen>
         title: const Text('TabBar Widget'),
         bottom: TabBar(
           controller: _tabController,
-          tabs: const <Widget>[
-            Tab(
-              icon: Icon(Icons.cloud_outlined),
-            ),
-            Tab(
-              icon: Icon(Icons.beach_access_sharp),
-            )
-          ],
+          tabs: const <Widget>[Text('Grobot market'), Text('My Grobot')],
         ),
       ),
       body: TabBarView(
         controller: _tabController,
-        children: const <Widget>[
-          GrobotMaket(),
-          Center(
-            child: Text("It's rainy here"),
-          )
+        children: <Widget>[
+          GrobotMaket(true),
+          GrobotMaket(false),
         ],
       ),
     );
