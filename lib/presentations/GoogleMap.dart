@@ -18,6 +18,7 @@ class MapSampleState extends State<MapSample> {
   static const destination = LatLng(21.020038, 105.837766);
   List<LatLng> polyLineCoordinates = [];
   LocationData? currentLocation;
+  LocationData? startLocation;
 
   static final CameraPosition _kGooglePlex =
       CameraPosition(target: sourceLocation, zoom: 12.4746);
@@ -38,14 +39,14 @@ class MapSampleState extends State<MapSample> {
     Location location = Location();
     currentLocation = await location.getLocation();
     getPolylineCoordinates();
-    // setState(() {});
+    setState(() {});
 
     // GoogleMapController googleMapController = await _controller.future;
 
     location.onLocationChanged.listen((newLocaltion) {
       currentLocation = newLocaltion;
-      getPolylineCoordinates();
-      // setState(() {});
+      // getPolylineCoordinates();
+      setState(() {});
       log('====currentlocation ${currentLocation!.latitude!} ${currentLocation!.longitude!}');
       // googleMapController.animateCamera(CameraUpdate.newCameraPosition(
       //     CameraPosition(
@@ -67,7 +68,6 @@ class MapSampleState extends State<MapSample> {
     if (result.points.isNotEmpty) {
       result.points.forEach((element) =>
           polyLineCoordinates.add(LatLng(element.latitude, element.longitude)));
-      setState(() {});
     }
   }
 
