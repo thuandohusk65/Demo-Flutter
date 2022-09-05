@@ -7,6 +7,8 @@ import 'package:flutter_project/model/UserInfo.dart';
 import 'package:flutter_project/presentations/GrobotMarket.dart';
 import 'package:flutter_project/utils/utils.dart';
 
+import 'convert_image_to_pdf.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -60,6 +62,16 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           GrobotMaket(false),
         ],
       ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder:
+                    (context) => GeneratePdfWidget()));
+            // Add your onPressed code here!
+          },
+          backgroundColor: Colors.green,
+          child: const Icon(Icons.navigation),
+        )
     );
   }
 }
