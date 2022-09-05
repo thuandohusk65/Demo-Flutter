@@ -122,7 +122,9 @@ class _ConvertImageToPdfState extends State<ConvertImageToPdfStatefulWidget> {
   }
 
   Future<List<int>> _readImageData(String name) async {
-    final ByteData data = await rootBundle.load(name);
+    File file = File(name); //This file is correct
+    Uint8List bytes = file.readAsBytesSync();
+    final ByteData data =  ByteData.view(bytes.buffer);
     return data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
   }
 
