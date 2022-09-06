@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_project/model/UserInfo.dart';
 import 'package:flutter_project/presentations/GrobotMarket.dart';
+import 'package:flutter_project/presentations/MutipleImageToPdf.dart';
 import 'package:flutter_project/utils/utils.dart';
 
 import 'convert_image_to_pdf.dart';
@@ -66,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           onPressed: () {
             Navigator.push(context,
                 MaterialPageRoute(builder:
-                    (context) => GeneratePdfWidget()));
+                    (context) => MutipleImageToPdf()));
             // Add your onPressed code here!
           },
           backgroundColor: Colors.green,

@@ -17,7 +17,7 @@ class TakePictureScreen extends StatefulWidget {
   }) : super(key: key);
 
   final CameraDescription camera;
-  final Function(String)? onGetPath;
+  final Function(XFile)? onGetPath;
 
   @override
   TakePictureScreenState createState() => TakePictureScreenState();
@@ -83,7 +83,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
             final image = await _controller.takePicture();
 
             if (!mounted) return;
-            widget.onGetPath?.call(image.path);
+            widget.onGetPath?.call(image);
             Navigator.of(context).pop();
 
             // If the picture was taken, display it on a new screen.

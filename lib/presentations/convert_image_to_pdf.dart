@@ -1,10 +1,10 @@
-
 import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_project/presentations/MutipleImageToPdf.dart';
 import 'package:flutter_project/presentations/take_camera.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:open_file/open_file.dart';
@@ -23,6 +23,7 @@ class GeneratePdfWidget extends StatelessWidget {
 class ConvertImageToPdfStatefulWidget extends StatefulWidget {
   ConvertImageToPdfStatefulWidget({Key? key, this.title}) : super(key: key);
   final String? title;
+
   @override
   _ConvertImageToPdfState createState() => _ConvertImageToPdfState();
 }
@@ -45,20 +46,21 @@ class _ConvertImageToPdfState extends State<ConvertImageToPdfStatefulWidget> {
               ),
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.resolveWith(
-                          (states) => Colors.blue)),
+                      (states) => Colors.blue)),
               onPressed: () async {
                 final cameras = await availableCameras();
 
                 // Get a specific camera from the list of available cameras.
                 final firstCamera = cameras.first;
-                Navigator.push(context,
-                    MaterialPageRoute(builder:
-                        (context) => TakePictureScreen(camera: firstCamera, onGetPath: (String a) {
-                          _convertImageToPDF(a);
-                        },
-                        )
-                    )
-                );
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => TakePictureScreen(
+                              camera: firstCamera,
+                              onGetPath: (XFile a) {
+                                _convertImageToPDF([a]);
+                              },
+                            )));
               },
             ),
             TextButton(
@@ -68,8 +70,13 @@ class _ConvertImageToPdfState extends State<ConvertImageToPdfStatefulWidget> {
               ),
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.resolveWith(
-                          (states) => Colors.blue)),
-              onPressed: getImage,
+                      (states) => Colors.blue)),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MutipleImageToPdf()));
+              },
             ),
             TextButton(
               child: const Text(
@@ -78,8 +85,8 @@ class _ConvertImageToPdfState extends State<ConvertImageToPdfStatefulWidget> {
               ),
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.resolveWith(
-                          (states) => Colors.blue)),
-              onPressed: () async { _convertImageToPDF('assets/images/img_home_bg.png');},
+                      (states) => Colors.blue)),
+              onPressed: () async {},
             )
           ],
         ),
@@ -87,22 +94,24 @@ class _ConvertImageToPdfState extends State<ConvertImageToPdfStatefulWidget> {
     );
   }
 
-  Future<void> _convertImageToPDF(String name) async {
+  Future<void> _convertImageToPDF(List<XFile> files) async {
     //Create the PDF document
     PdfDocument document = PdfDocument();
     //Add the page
-    PdfPage page = document.pages.add();
-    //Load the image.
-    final PdfImage image = PdfBitmap(await _readImageData(name));
-    //draw image to the first page
-    page.graphics.drawImage(
-        image, Rect.fromLTWH(0, 0, page.size.width, page.size.height));
-    //Save the docuemnt
-    List<int> bytes = document.save();
-    //Dispose the document.
+    List<int> bytes = [];
+    for (var element in files) {
+      PdfPage page = document.pages.add();
+      //Load the image.
+      final PdfImage image = PdfBitmap(await _readImageData(element.path));
+      //draw image to the first page
+      page.graphics.drawImage(
+          image, Rect.fromLTWH(0, 0, page.size.width, page.size.height));
+      //Save the docuemnt
+      bytes.addAll(document.save());
+    }
     document.dispose();
     //Get external storage directory
-    Directory directory = (await getApplicationDocumentsDirectory())!;
+    Directory directory = (await getApplicationDocumentsDirectory());
     //Get directory path
     String path = directory.path;
     //Create an empty file to write PDF data
@@ -124,14 +133,14 @@ class _ConvertImageToPdfState extends State<ConvertImageToPdfStatefulWidget> {
   Future<List<int>> _readImageData(String name) async {
     File file = File(name); //This file is correct
     Uint8List bytes = file.readAsBytesSync();
-    final ByteData data =  ByteData.view(bytes.buffer);
+    final ByteData data = ByteData.view(bytes.buffer);
     return data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
   }
 
   Future getImage() async {
-    var image = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if(image != null) {
-      _convertImageToPDF(image.path);
+    var image = await ImagePicker().pickMultiImage();
+    if (image != null) {
+      _convertImageToPDF(image);
     }
   }
 }
