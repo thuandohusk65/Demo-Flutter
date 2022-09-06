@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_project/presentations/Login.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'login/view/widget/login_page.dart';
 
 void main() {
   if (defaultTargetPlatform == TargetPlatform.android) {
@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const LoginPage(title: 'Hello thuan 123 meo meo'),
+      home: const LoginPage(),
     );
   }
 }

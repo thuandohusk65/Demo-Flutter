@@ -2,9 +2,8 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_project/component/GrobotItem.dart';
-import 'package:flutter_project/model/Grobot.dart';
-import 'package:flutter_project/model/MyGrobots.dart';
-import 'package:flutter_project/model/UserInfo.dart';
+import 'package:flutter_project/models/Grobot.dart';
+import 'package:flutter_project/models/MyGrobots.dart';
 import 'package:flutter_project/utils/utils.dart';
 
 class GrobotMaket extends StatefulWidget {
