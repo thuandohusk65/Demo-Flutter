@@ -30,8 +30,8 @@ class _GrobotMarketState extends State<GrobotMaket> {
               {
                 return GridView.count(
                   crossAxisCount: 2,
-                  crossAxisSpacing: 20,
-                  mainAxisSpacing: 20,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
                   children: List.generate(
                       listGrobot!.length,
                       (index) => (listGrobot[index].grobot != null)
