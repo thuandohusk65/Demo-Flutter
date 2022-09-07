@@ -56,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
     }, buildWhen: (previous, current) {
       return !(previous == current);
     }, builder: (context, state) {
-      return (state == LoginStates.loading)
+      return (state != LoginStates.loading)
           ? Scaffold(
               resizeToAvoidBottomInset: false,
               body: Container(
@@ -171,7 +171,9 @@ class _LoginPageState extends State<LoginPage> {
                                   style: TextButton.styleFrom(
                                       textStyle: const TextStyle(
                                           fontSize: 20, color: Colors.white)),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    BlocProvider.of<LoginCubit>(context).requestLogin();
+                                  },
                                   child: const Text('Login',
                                       style: TextStyle(
                                           fontWeight: FontWeight.normal,

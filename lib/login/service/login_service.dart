@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_project/models/UserToken.dart';
 
 class LoginService {
   Future<Response<dynamic>> getUserToken() async {

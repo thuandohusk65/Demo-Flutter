@@ -1,17 +1,18 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_project/login/view/login.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'login/view/widget/login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+// import 'firebase_options.dart';
+// import 'package:firebase_messaging/firebase_messaging.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform
-  );
-  FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform
+  // );
+  // FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
   if (defaultTargetPlatform == TargetPlatform.android) {
     AndroidGoogleMapsFlutter.useAndroidViewSurface = true;
   }
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const LoginPage(),
+      home: const LoginScreen(),
     );
   }
 }

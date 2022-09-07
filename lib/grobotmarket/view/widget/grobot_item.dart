@@ -35,7 +35,7 @@ class GroBotItem extends StatelessWidget {
                   urlImg,
                   fit: BoxFit.cover),
               Text(name,
-                  style: TextStyle(color: Colors.deepOrange, fontSize: 16))
+                  style: const TextStyle(color: Colors.deepOrange, fontSize: 16))
             ],
           ),
         ));

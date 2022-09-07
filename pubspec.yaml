@@ -30,7 +30,7 @@ dependencies:
   flutter:
     sdk: flutter
   dio: ^4.0.6
-  flutter_bloc:  ^8.1.1
+  flutter_bloc: ^8.1.1
   shared_preferences: ^2.0.15
   google_maps_flutter: ^2.1.12
   flutter_polyline_points: ^1.0.0
@@ -47,7 +47,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   firebase_core: ^1.12.0
-  firebase_messaging: ^11.2.7
+#  firebase_messaging: ^11.2.7
 
 dev_dependencies:
   flutter_test:

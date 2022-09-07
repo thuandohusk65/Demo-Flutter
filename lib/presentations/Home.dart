@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_project/models/UserInfo.dart';
-import 'package:flutter_project/presentations/GrobotMarket.dart';
+import 'package:flutter_project/grobotmarket/view/GrobotMarket.dart';
 import 'package:flutter_project/presentations/MutipleImageToPdf.dart';
 import 'package:flutter_project/utils/utils.dart';
 
@@ -59,8 +59,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[
-          GrobotMaket(true),
-          GrobotMaket(false),
+          GrobotMaket(),
+          GrobotMaket(),
         ],
       ),
         floatingActionButton: FloatingActionButton(
