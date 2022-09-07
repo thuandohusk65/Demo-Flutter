@@ -15,12 +15,11 @@ class LoginScreen extends StatelessWidget {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      body: BlocProvider(
-        create: (_) => LoginCubit(),
-        child: const LoginPage(),
-      )
-      // This trailing comma makes auto-formatting nicer for build methods.
-    );
+        body: BlocProvider<LoginCubit>(
+      create: (_) => LoginCubit(),
+      child:   const LoginPage(),
+    )
+        // This trailing comma makes auto-formatting nicer for build methods.
+        );
   }
-
 }

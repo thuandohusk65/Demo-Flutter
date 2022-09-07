@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_project/login/cubit/login_cubit.dart';
 import 'package:flutter_project/login/cubit/login_state.dart';
-import 'package:flutter_project/login/cubit/login_state.dart';
-import 'package:flutter_project/login/cubit/login_state.dart';
 import 'package:flutter_project/models/UserToken.dart';
 import 'package:flutter_project/presentations/Home.dart';
 import 'package:flutter_project/utils/utils.dart';
@@ -49,37 +47,33 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return
-      BlocConsumer<LoginCubit, LoginStates> (
-      listener: ,
-        builder:  (context, state) {
-          (state == LoginStates.loading)?
-          Scaffold(
+    return Scaffold(
+        body: BlocConsumer<LoginCubit, LoginStates>(listener: (context, state) {
+      if (state == LoginStates.success && UserUtils.accessToken.isNotEmpty) {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()));
+      }
+    }, buildWhen: (previous, current) {
+      return !(previous == current);
+    }, builder: (context, state) {
+      return (state == LoginStates.loading)
+          ? Scaffold(
               resizeToAvoidBottomInset: false,
               body: Container(
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width,
-                height: MediaQuery
-                    .of(context)
-                    .size
-                    .height,
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
                 decoration: const BoxDecoration(
                     image: DecorationImage(
-                      fit: BoxFit.fitWidth,
-                      image: AssetImage('assets/images/img_home_bg.png'),
-                    )),
+                  fit: BoxFit.fitWidth,
+                  image: AssetImage('assets/images/img_home_bg.png'),
+                )),
 
                 // Center is a layout widget. It takes a single child and positions it
                 // in the middle of the parent.
                 child: Container(
                     margin: EdgeInsets.symmetric(
                         horizontal: 24,
-                        vertical: (MediaQuery
-                            .of(context)
-                            .size
-                            .height) * 0.2),
+                        vertical: (MediaQuery.of(context).size.height) * 0.2),
                     decoration: const BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(16)),
                       color: Colors.white,
@@ -118,8 +112,8 @@ class _LoginPageState extends State<LoginPage> {
                                   color: Colors.grey),
                             ),
                             Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 12),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 12),
                                 //apply padding to all four sides
                                 child: TextFormField(
                                   decoration: const InputDecoration(
@@ -131,8 +125,8 @@ class _LoginPageState extends State<LoginPage> {
                                   },
                                 )),
                             Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 12),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 12),
                                 //apply padding to all four sides
                                 child: TextFormField(
                                     decoration: InputDecoration(
@@ -140,14 +134,14 @@ class _LoginPageState extends State<LoginPage> {
                                         labelText: 'password',
                                         suffixIcon: IconButton(
                                           icon: Icon(
-                                            // Based on passwordVisible state choose the icon
+                                              // Based on passwordVisible state choose the icon
                                               _passwordVisible
                                                   ? Icons.visibility
                                                   : Icons.visibility_off),
                                           onPressed: () {
                                             setState(() {
                                               _passwordVisible =
-                                              !_passwordVisible;
+                                                  !_passwordVisible;
                                             });
                                           },
                                         )),
@@ -167,8 +161,8 @@ class _LoginPageState extends State<LoginPage> {
                                 width: Size.infinite.width,
                                 margin: const EdgeInsets.all(24),
                                 decoration: const BoxDecoration(
-                                    borderRadius: BorderRadius.all(Radius
-                                        .circular(16)),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(16)),
                                     gradient: LinearGradient(colors: [
                                       Colors.deepOrangeAccent,
                                       Colors.yellow
@@ -177,31 +171,7 @@ class _LoginPageState extends State<LoginPage> {
                                   style: TextButton.styleFrom(
                                       textStyle: const TextStyle(
                                           fontSize: 20, color: Colors.white)),
-                                  onPressed: () async {
-                                    try {
-                                      var response = await Dio().post(
-                                          'http://api.beta.radiantgalaxy.io/sdk/v1/auth/login/credential',
-                                          data: {
-                                            'email': 'chhh@gmail.com',
-                                            'password': '123qweA@'
-                                          });
-                                      Map<String, dynamic> dataResponse =
-                                      json.decode(response.toString());
-                                      final userToken = UserToken.fromJson(
-                                          dataResponse);
-                                      UserUtils.accessToken =
-                                          userToken.accessToken;
-                                      if (UserUtils.accessToken.isNotEmpty) {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                const HomeScreen()));
-                                      }
-                                    } catch (e) {
-                                      print(e);
-                                    }
-                                  },
+                                  onPressed: () {},
                                   child: const Text('Login',
                                       style: TextStyle(
                                           fontWeight: FontWeight.normal,
@@ -210,7 +180,10 @@ class _LoginPageState extends State<LoginPage> {
                                 )),
                           ],
                         ))),
-              )):Center();
-        });
+              ))
+          : const Center(
+              child: CircularProgressIndicator(),
+            );
+    }));
   }
 }
