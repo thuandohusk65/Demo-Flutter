@@ -124,10 +124,10 @@ class _MyAppState extends State<MutipleImageToPdf> {
       title: title,
       message: msg,
       duration: Duration(seconds: 3),
-      icon: Icon(
+      icon: const Icon(
         Icons.info,
         color: Colors.blue,
       ),
-    )..show(context);
+    ).show(context);
   }
 }

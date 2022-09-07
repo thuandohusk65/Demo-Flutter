@@ -2,9 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_project/login/view/login.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'login/view/widget/login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
-// import 'firebase_options.dart';
+import 'firebase_options.dart';
 // import 'package:firebase_messaging/firebase_messaging.dart';
 
 void main() async {
@@ -13,6 +12,15 @@ void main() async {
   //   options: DefaultFirebaseOptions.currentPlatform
   // );
   // FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+  // NotificationSettings messaging = await firebaseMessaging.requestPermission(
+  //   alert: true,
+  //   announcement: false,
+  //   badge: true,
+  //   carPlay: false,
+  //   criticalAlert: false,
+  //   provisional: false,
+  //   sound: true
+  // );
   if (defaultTargetPlatform == TargetPlatform.android) {
     AndroidGoogleMapsFlutter.useAndroidViewSurface = true;
   }
@@ -26,7 +34,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo meo meo',
       theme: ThemeData(
         // This is the theme of your application.
         //
