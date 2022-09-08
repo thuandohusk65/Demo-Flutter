@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'dart:developer';
-
-import 'package:flutter/cupertino.dart';
+import 'package:google_maps_webservice/places.dart' as place;
 import 'package:flutter/material.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:google_api_headers/google_api_headers.dart';
 
 class MapSample extends StatefulWidget {
   @override
@@ -19,6 +20,8 @@ class MapSampleState extends State<MapSample> {
   List<LatLng> polyLineCoordinates = [];
   LocationData? currentLocation;
   LocationData? startLocation;
+  final Mode _mode = Mode.overlay;
+  final homeScaffoldKey = GlobalKey<ScaffoldState>();
 
   static final CameraPosition _kGooglePlex =
       CameraPosition(target: sourceLocation, zoom: 12.4746);
@@ -76,33 +79,74 @@ class MapSampleState extends State<MapSample> {
     return Scaffold(
       body: (currentLocation == null)
           ? Center(child: Text("Loading"))
-          : GoogleMap(
-              mapType: MapType.hybrid,
-              initialCameraPosition: CameraPosition(
-                  target: LatLng(
-                      currentLocation!.latitude!, currentLocation!.longitude!),
-                  zoom: 13.5),
-              markers: {
-                Marker(
-                    markerId: MarkerId("source"),
-                    position: LatLng(currentLocation!.latitude!,
-                        currentLocation!.longitude!)),
-                Marker(
-                    markerId: const MarkerId("destination"),
-                    position: destination)
-              },
-              polylines: {
-                Polyline(
-                    polylineId: PolylineId("polylineId"),
-                    points: polyLineCoordinates,
-                    color: Colors.lightBlueAccent,
-                    width: 3),
-              },
-              onMapCreated: (GoogleMapController controller) {
-                _controller.complete(controller);
-              },
-            ),
+          : Stack(children: [
+              GoogleMap(
+                mapType: MapType.hybrid,
+                initialCameraPosition: CameraPosition(
+                    target: LatLng(currentLocation!.latitude!,
+                        currentLocation!.longitude!),
+                    zoom: 13.5),
+                markers: {
+                  Marker(
+                      markerId: MarkerId("source"),
+                      position: LatLng(currentLocation!.latitude!,
+                          currentLocation!.longitude!)),
+                  Marker(
+                      markerId: const MarkerId("destination"),
+                      position: destination)
+                },
+                polylines: {
+                  Polyline(
+                      polylineId: PolylineId("polylineId"),
+                      points: polyLineCoordinates,
+                      color: Colors.lightBlueAccent,
+                      width: 3),
+                },
+                onMapCreated: (GoogleMapController controller) {
+                  _controller.complete(controller);
+                },
+              ),
+              ElevatedButton(
+                  onPressed: _handlePressButton,
+                  child: const Text("Search Places"))
+            ]),
     );
+  }
+
+  Future<void> _handlePressButton() async {
+    place.Prediction? p = await PlacesAutocomplete.show(
+        context: context,
+        apiKey: 'AIzaSyDgr2Wp6QZ79sHfNvnOiNdMYjtrNyXcq6U',
+        onError: onError,
+        mode: _mode,
+        language: 'en',
+        strictbounds: false,
+        types: [""],
+        decoration: InputDecoration(
+            hintText: 'Search',
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20),
+                borderSide: BorderSide(color: Colors.white))),
+        components: [
+          place.Component(place.Component.country, "pk"),
+          place.Component(place.Component.country, "usa")
+        ]);
+
+    displayPrediction(p!, homeScaffoldKey.currentState);
+  }
+
+  void onError(place.PlacesAutocompleteResponse response) {
+    homeScaffoldKey.currentState!
+        .showSnackBar(SnackBar(content: Text(response.errorMessage!)));
+  }
+
+  Future<void> displayPrediction(
+      place.Prediction p, ScaffoldState? currentState) async {
+    place.GoogleMapsPlaces places = place.GoogleMapsPlaces(
+        apiKey: 'AIzaSyDgr2Wp6QZ79sHfNvnOiNdMYjtrNyXcq6U',
+        apiHeaders: await const GoogleApiHeaders().getHeaders());
+    place.PlacesDetailsResponse detail =
+        await places.getDetailsByPlaceId(p.placeId!);
   }
 
   Future<void> _goToTheLake() async {

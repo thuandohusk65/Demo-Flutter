@@ -9,7 +9,7 @@ import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 
-import 'mutiple_img_to_pdf.dart';
+import 'multiple_img_to_pdf.dart';
 
 class GeneratePdfWidget extends StatelessWidget {
   @override
@@ -107,7 +107,7 @@ class _ConvertImageToPdfState extends State<ConvertImageToPdfStatefulWidget> {
       page.graphics.drawImage(
           image, Rect.fromLTWH(0, 0, page.size.width, page.size.height));
       //Save the docuemnt
-      bytes.addAll(document.save());
+      // bytes.addAll(document.save());
     }
     document.dispose();
     //Get external storage directory

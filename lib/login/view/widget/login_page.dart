@@ -1,7 +1,11 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_project/login/cubit/login_cubit.dart';
 import 'package:flutter_project/login/cubit/login_state.dart';
+import 'package:flutter_project/models/UserToken.dart';
 import 'package:flutter_project/presentations/Home.dart';
 import 'package:flutter_project/utils/utils.dart';
 
@@ -13,14 +17,16 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  int _counter = 0;
+  String _account = "";
+  String _password = "";
+  var _passwordVisible = true;
+
   final accountTextController = TextEditingController();
   final passwordTextController = TextEditingController();
-  var _passwordVisible = true;
 
   @override
   void dispose() {
-    // Clean up the controller when the widget is removed from the
-    // widget tree.
     accountTextController.dispose();
     passwordTextController.dispose();
     super.dispose();
@@ -48,8 +54,8 @@ class _LoginPageState extends State<LoginPage> {
 
   Scaffold loginPage(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: Container(
+            resizeToAvoidBottomInset: false,
+            body: Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
               decoration: const BoxDecoration(
@@ -111,6 +117,9 @@ class _LoginPageState extends State<LoginPage> {
                                   border: UnderlineInputBorder(),
                                   labelText: 'Email address',
                                 ),
+                                onChanged: (account) {
+                                  // _account = account;
+                                },
                               )),
                           Padding(
                               padding:
