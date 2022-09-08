@@ -1,7 +1,7 @@
-
 import 'package:flutter/material.dart';
-import 'package:flutter_project/grobotmarket/view/GrobotMarket.dart';
+import 'package:flutter_project/grobotmarket/view/grobot_market.dart';
 import 'package:flutter_project/presentations/google_map.dart';
+
 import 'multiple_img_to_pdf.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -24,27 +24,26 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('TabBar Widget'),
-        actions: [
-          IconButton(
-              icon: Icon(Icons.map),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder:
-                        (context) => MapSample()));
-              }),
-          IconButton(
-              icon: Icon(Icons.picture_as_pdf),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder:
-                        (context) => MutipleImageToPdf()));
-              })
-        ],
-      ),
-      body:
-          const GrobotMaket()
-    );
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: const Text('Grobot Market'),
+          actions: [
+            IconButton(
+                icon: Icon(Icons.map),
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => MapSample()));
+                }),
+            IconButton(
+                icon: Icon(Icons.picture_as_pdf),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MutipleImageToPdf()));
+                })
+          ],
+        ),
+        body: const GrobotMaket());
   }
 }

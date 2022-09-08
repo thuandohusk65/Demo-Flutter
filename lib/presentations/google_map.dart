@@ -1,14 +1,17 @@
 import 'dart:async';
 import 'dart:developer';
-import 'package:google_maps_webservice/places.dart' as place;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
 import 'package:google_api_headers/google_api_headers.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_webservice/places.dart' as place;
+import 'package:location/location.dart';
 
 class MapSample extends StatefulWidget {
+  const MapSample({Key? key}) : super(key: key);
+
   @override
   State<MapSample> createState() => MapSampleState();
 }
@@ -22,15 +25,8 @@ class MapSampleState extends State<MapSample> {
   LocationData? startLocation;
   final Mode _mode = Mode.overlay;
   final homeScaffoldKey = GlobalKey<ScaffoldState>();
-
-  static final CameraPosition _kGooglePlex =
-      CameraPosition(target: sourceLocation, zoom: 12.4746);
-
-  static final CameraPosition _kLake = CameraPosition(
-      bearing: 192.8334901395799,
-      target: LatLng(37.43296265331129, -122.08832357078792),
-      tilt: 59.440717697143555,
-      zoom: 19.151926040649414);
+  final List<Marker> listMarker = [];
+  final CameraPosition _kGooglePlex = const CameraPosition(target: sourceLocation, zoom: 12.4746);
 
   @override
   void initState() {
@@ -41,15 +37,25 @@ class MapSampleState extends State<MapSample> {
   void getCurrentLocation() async {
     Location location = Location();
     currentLocation = await location.getLocation();
+    listMarker.add(Marker(
+        markerId: MarkerId("currrent"),
+        position:
+        LatLng(currentLocation!.latitude!, currentLocation!.longitude!)));
+    listMarker.add(
+        const Marker(markerId: MarkerId("destination"), position: destination));
     getPolylineCoordinates();
     setState(() {});
 
-    // GoogleMapController googleMapController = await _controller.future;
 
     location.onLocationChanged.listen((newLocaltion) {
       currentLocation = newLocaltion;
       // getPolylineCoordinates();
-      setState(() {});
+      setState(() {
+        listMarker[0] = Marker(
+            markerId: MarkerId("currrent"),
+            position: LatLng(
+                currentLocation!.latitude!, currentLocation!.longitude!));
+      });
       log('====currentlocation ${currentLocation!.latitude!} ${currentLocation!.longitude!}');
       // googleMapController.animateCamera(CameraUpdate.newCameraPosition(
       //     CameraPosition(
@@ -78,37 +84,31 @@ class MapSampleState extends State<MapSample> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: (currentLocation == null)
-          ? Center(child: Text("Loading"))
+          ? const Center(child: Text("Loading"))
           : Stack(children: [
               GoogleMap(
-                mapType: MapType.hybrid,
+                mapType: MapType.normal,
                 initialCameraPosition: CameraPosition(
                     target: LatLng(currentLocation!.latitude!,
                         currentLocation!.longitude!),
                     zoom: 13.5),
-                markers: {
-                  Marker(
-                      markerId: MarkerId("source"),
-                      position: LatLng(currentLocation!.latitude!,
-                          currentLocation!.longitude!)),
-                  Marker(
-                      markerId: const MarkerId("destination"),
-                      position: destination)
-                },
+                markers: listMarker.toSet(),
                 polylines: {
                   Polyline(
                       polylineId: PolylineId("polylineId"),
                       points: polyLineCoordinates,
                       color: Colors.lightBlueAccent,
-                      width: 3),
+                      width: 4),
                 },
                 onMapCreated: (GoogleMapController controller) {
                   _controller.complete(controller);
                 },
               ),
+              Positioned(
+              top: 32, left: 20 ,child:
               ElevatedButton(
                   onPressed: _handlePressButton,
-                  child: const Text("Search Places"))
+                  child: const Text("Search Places")))
             ]),
     );
   }
@@ -128,16 +128,15 @@ class MapSampleState extends State<MapSample> {
                 borderRadius: BorderRadius.circular(20),
                 borderSide: BorderSide(color: Colors.white))),
         components: [
-          place.Component(place.Component.country, "pk"),
+          place.Component(place.Component.country, "vi"),
           place.Component(place.Component.country, "usa")
         ]);
-
     displayPrediction(p!, homeScaffoldKey.currentState);
   }
 
   void onError(place.PlacesAutocompleteResponse response) {
-    homeScaffoldKey.currentState!
-        .showSnackBar(SnackBar(content: Text(response.errorMessage!)));
+    // homeScaffoldKey.currentState!
+    //     .showSnackBar(SnackBar(content: Text(response.errorMessage!)));
   }
 
   Future<void> displayPrediction(
@@ -147,10 +146,11 @@ class MapSampleState extends State<MapSample> {
         apiHeaders: await const GoogleApiHeaders().getHeaders());
     place.PlacesDetailsResponse detail =
         await places.getDetailsByPlaceId(p.placeId!);
-  }
-
-  Future<void> _goToTheLake() async {
-    final GoogleMapController controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
+    final lat = detail.result.geometry!.location.lat;
+    final lng = detail.result.geometry!.location.lng;
+    listMarker.add(Marker(
+        markerId: MarkerId(detail.result.placeId), position: LatLng(lat, lng)));
+    final controller = await _controller.future;
+    controller.animateCamera(CameraUpdate.newLatLng(LatLng(lat, lng)));
   }
 }
