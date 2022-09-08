@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:camera/camera.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
@@ -8,13 +7,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-
-main() {
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: MutipleImageToPdf(),
-  ));
-}
 
 class MutipleImageToPdf extends StatefulWidget {
   @override
@@ -102,8 +94,8 @@ class _MyAppState extends State<MutipleImageToPdf> {
 
       pdf.addPage(pw.Page(
           pageFormat: PdfPageFormat.a4,
-          build: (pw.Context contex) {
-            return pw.Center(child: pw.Image(image));
+          build: (pw.Context context) {
+            return pw.Center(child: pw.Image(image, fit: pw.BoxFit.fitWidth));
           }));
     }
   }
@@ -111,7 +103,7 @@ class _MyAppState extends State<MutipleImageToPdf> {
   savePDF() async {
     try {
       final dir = await getExternalStorageDirectory();
-      final file = File('${dir!.path}/filename.pdf');
+      final file = File('${dir!.path}/${DateTime.now().millisecondsSinceEpoch}.pdf');
       await file.writeAsBytes(await pdf.save());
       showPrintedMessage('success', 'saved to documents');
     } catch (e) {

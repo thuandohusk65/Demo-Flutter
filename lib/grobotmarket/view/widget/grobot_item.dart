@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_project/presentations/GoogleMap.dart';
+import 'package:flutter_project/presentations/google_map.dart';
 
 class GroBotItem extends StatelessWidget {
   String urlImg;

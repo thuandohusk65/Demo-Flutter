@@ -15,6 +15,7 @@ class LoginScreen extends StatelessWidget {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         body: BlocProvider<LoginCubit>(
       create: (_) => LoginCubit(),
       child:   const LoginPage(),

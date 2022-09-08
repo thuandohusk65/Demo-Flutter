@@ -5,12 +5,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_project/models/UserInfo.dart';
 import 'package:flutter_project/grobotmarket/view/GrobotMarket.dart';
-import 'package:flutter_project/presentations/MutipleImageToPdf.dart';
+import 'package:flutter_project/presentations/google_map.dart';
 import 'package:flutter_project/utils/utils.dart';
-
-import 'convert_image_to_pdf.dart';
+import 'mutiple_img_to_pdf.dart';
 
 class HomeScreen extends StatefulWidget {
+  final tabSize = 2;
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
@@ -43,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     getTitleBar();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: widget.tabSize, vsync: this);
   }
 
   @override
@@ -53,25 +53,25 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         title: const Text('TabBar Widget'),
         bottom: TabBar(
           controller: _tabController,
-          tabs: const <Widget>[Text('Grobot market'), Text('My Grobot')],
+          tabs: const <Widget>[Text('Grobot market'), Text('Convert Pdf')],
         ),
       ),
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[
           GrobotMaket(),
-          GrobotMaket(),
+          MutipleImageToPdf()
         ],
       ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             Navigator.push(context,
                 MaterialPageRoute(builder:
-                    (context) => MutipleImageToPdf()));
+                    (context) => MapSample()));
             // Add your onPressed code here!
           },
           backgroundColor: Colors.green,
-          child: const Icon(Icons.navigation),
+          child: const Icon(Icons.map),
         )
     );
   }
