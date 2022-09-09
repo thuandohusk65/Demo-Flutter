@@ -27,18 +27,17 @@ class _GrobotMarketState extends State<GrobotMaket> {
               {
                 return Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: GridView.count(
-                      childAspectRatio: (1 / 1.3),
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 6,
-                      mainAxisSpacing: 6,
-                      children: List.generate(
-                          listGrobot!.length,
-                          (index) => (listGrobot[index].grobot != null)
-                              ? GroBotItem(
-                                  listGrobot[index].grobot!.gmodel!
-                          )
-                              : const SizedBox()),
+                    child: GridView.builder(
+                      itemCount: listGrobot!.length,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        childAspectRatio: (1 / 1.3),
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 6,
+                        mainAxisSpacing: 6,
+                      ),
+                      itemBuilder: (context, index) =>
+                          GroBotItem(listGrobot[index].grobot!.gmodel!),
                     ));
               }
             case GrobotMarketState.failure:

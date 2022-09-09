@@ -33,7 +33,6 @@ class _LoginPageState extends State<LoginPage> {
           if (state == LoginStates.success &&
               UserUtils.accessToken.isNotEmpty) {
             Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const HomeScreen()), (route) => false);
-
             // Navigator.push(context,
             //     MaterialPageRoute(builder: (context) => const HomeScreen()));
           }
