@@ -4,9 +4,9 @@ import 'package:flutter_project/models/UserToken.dart';
 import 'package:flutter_project/utils/utils.dart';
 
 class LoginRepository {
-  Future<UserToken> getUserInfor() async {
+  Future<UserToken> getUserToken(String acc, String pass) async {
     final loginService = LoginService();
-    var response = await loginService.getUserToken();
+    var response = await loginService.getUserToken(acc, pass);
     try {
       Map<String, dynamic> dataResponse =
       json.decode(response.toString());

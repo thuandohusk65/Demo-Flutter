@@ -19,6 +19,13 @@ class _LoginPageState extends State<LoginPage> {
   final passwordTextController = TextEditingController();
 
   @override
+  void initState() {
+    accountTextController.text = 'chhh@gmail.com';
+    passwordTextController.text = '123qweA@';
+    super.initState();
+  }
+
+  @override
   void dispose() {
     accountTextController.dispose();
     passwordTextController.dispose();
@@ -160,7 +167,7 @@ class _LoginPageState extends State<LoginPage> {
                                     fontSize: 20, color: Colors.white)),
                             onPressed: () {
                               BlocProvider.of<LoginCubit>(context)
-                                  .requestLogin();
+                                  .requestLogin(accountTextController.text, passwordTextController.text);
                             },
                             child: const Text('Login',
                                 style: TextStyle(

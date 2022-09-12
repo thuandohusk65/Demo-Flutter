@@ -16,7 +16,7 @@ class ScanPdfCubit extends Cubit<ScanPdfState> {
   final picker = ImagePicker();
   final pdf = pw.Document();
   final List<File> image = [];
-  StreamController createPdfStreamController = StreamController<bool>();
+  StreamController createPdfStreamController = StreamController<bool>.broadcast();
   Stream get createPdfStream => createPdfStreamController.stream;
 
 
