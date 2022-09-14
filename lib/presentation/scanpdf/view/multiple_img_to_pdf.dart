@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../cubit/scan_pdf_cubit.dart';
 import '../cubit/scan_pdf_state.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class MutipleImageToPdf extends StatefulWidget {
   @override
@@ -43,19 +44,24 @@ class _MyAppState extends State<MutipleImageToPdf> {
               (state == ScanPdfState.initial)
                   ? const Center(child: Text("Add your photo!"))
                   : SizedBox(
-                  height: MediaQuery.of(context).size.height - 100,
-                  child: ListView.builder(
-                      itemCount: cubit.image.length,
-                      itemBuilder: (context, index) => Container(
-                          height: 400,
-                          width: double.infinity,
-                          margin: const EdgeInsets.all(8),
-                          child: Image.file(
-                            cubit.image[index],
-                            fit: BoxFit.cover,
-                          )),
-                    )),
-              if (state == ScanPdfState.loading) const Center(child: CircularProgressIndicator()) else const SizedBox(width: 0, height: 0)
+                      height: MediaQuery.of(context).size.height - 100,
+                      child: ListView.builder(
+                        itemCount: cubit.image.length,
+                        itemBuilder: (context, index) => Container(
+                            height: 400,
+                            width: double.infinity,
+                            margin: const EdgeInsets.all(8),
+                            child: (kIsWeb)
+                                ? Image.network(cubit.image[index].path)
+                                : Image.file(
+                                    cubit.image[index],
+                                    fit: BoxFit.cover,
+                                  )),
+                      )),
+              if (state == ScanPdfState.loading)
+                const Center(child: CircularProgressIndicator())
+              else
+                const SizedBox(width: 0, height: 0)
             ])
           ]);
         })));
